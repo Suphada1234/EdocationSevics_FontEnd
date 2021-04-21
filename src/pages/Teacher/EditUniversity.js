@@ -1,10 +1,10 @@
 import React from "react"
 import ViewEditUniversity from "../../components/ViewTeacher/ViewEditUniversity";
  
-const EditUniversity = () => {
+const EditUniversity = (props) => {
     return(
 <>
-    <ViewEditUniversity/>
+    <ViewEditUniversity id={props.match.params.id}/>
 </>
     );
 };

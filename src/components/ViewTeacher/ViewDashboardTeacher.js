@@ -1,6 +1,5 @@
 import React, { useState } from 'react'; 
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText,  Card, CardText, CardBody, CardLink,
-    CardTitle, CardSubtitle,Badge  } from 'reactstrap';
+import { Container, Row, Col, Button,  } from 'reactstrap';
 
 const ViewDashboardTeacher = (props) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);

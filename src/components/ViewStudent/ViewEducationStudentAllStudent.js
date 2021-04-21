@@ -1,10 +1,23 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText,  Card, CardText, CardBody, CardLink,
     CardTitle, CardSubtitle ,Badge} from 'reactstrap';
 
 const ViewEducationStudentAllStudent = (props) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
+    const [educationdata, setEducationdata] = useState([]);
+//ไปดึง api ของอันเก่ามาใช้จาก url
+    const updateEducationdata = () =>{
+        axios.get("http://localhost:8080/EducationData/getAllEducationData").then((response) => {
+            console.log(response);
+            setEducationdata(response.data.educationdata);
+        });
+    };
+
+    useEffect(() => {
+      updateEducationdata();
+    }, []);
     return (
         <div>
      <div class="container">
@@ -15,11 +28,9 @@ const ViewEducationStudentAllStudent = (props) => {
   <FormGroup>
         <Label for="id_university">ชื่อมหาวิทยาลัย</Label>
         <Input type="select" name="id_university" id="id_university">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+          <option>มหาวิทยาลัยราชภัฏนครปฐม</option>
+          <option>มหาวิทยาลัยศิลปากร(นครปฐม)</option>
+          <option>มหาวิทยาลัยเกษตรศาสตร์กำเเพงเเสน</option>
         </Input>
       </FormGroup>
 </Col>
@@ -27,11 +38,9 @@ const ViewEducationStudentAllStudent = (props) => {
   <FormGroup>
         <Label for="id_faculty">คณะ</Label>
         <Input type="select" name="id_faculty" id="id_faculty">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+          <option>วิทยาศาสตร์และเทคโนโลยี</option>
+          <option>ครุศาสตร์</option>
+          <option>วิทยาการจัดการ</option>
         </Input>
       </FormGroup>
 </Col>
@@ -41,23 +50,17 @@ const ViewEducationStudentAllStudent = (props) => {
   <FormGroup>
         <Label for="id_course">สาขา</Label>
         <Input type="select" name="id_course" id="id_course">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+          <option>วิศวกรรมซอฟต์แวร์</option>
+          <option>การศึกษาปฐมวัย</option>
         </Input>
       </FormGroup>
 </Col>
 <Col xs="6"> 
   <FormGroup>
-        <Label for="id_major">หมวดหมู่</Label>
+        <Label for="id_major">หมวดสาขา</Label>
         <Input type="select" name="id_major" id="id_major">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+          <option>คอมพิวเตอร์</option>
+          <option>ครู</option>
         </Input>
       </FormGroup>
 </Col>
@@ -65,34 +68,45 @@ const ViewEducationStudentAllStudent = (props) => {
 </div>    
 <br />
 <div class="container">
-  
-        <Row>
+{educationdata.map((educationdata) => {
+ return(
+        <Row >
 
         <Col>  
         <Card>
       <CardBody>
-      <Badge color="primary">คอมพิวเตอร์</Badge>
-      <Row form>
+      <Badge color="primary">{educationdata.name_major}</Badge>
+      <Row >
         <Col md={6}>
-            <Label for="exampleEmail">มหาวิทยาลัย</Label>
+            <Label for="exampleEmail">มหาวิทยาลัย</Label>: {educationdata.name_uni}
         </Col>
       </Row>
-      <Row form>
+      <Row >
       <Col md={6}>
-           <Label for="examplePassword">คณะ  </Label>: วิศวกรรมซอฟต์เเวร์
+           <Label for="examplePassword">คณะ  </Label>: {educationdata.name_faculty}
         </Col>
+        </Row>
+        <Row>
         <Col md={6}>
-            <Label for="exampleEmail">สาขา</Label>
+            <Label for="exampleEmail">สาขา</Label>: {educationdata.name_course}
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+            <Label for="exampleEmail">รอบที่</Label>: {educationdata.name_round}
         </Col>
       </Row>
     </CardBody>
-        <CardBody>
-          <Button href="./educationstudentdetail">รายละเอียด</Button>
-        </CardBody>
+       
+          <Button href={"/educationstudentdetail/" + educationdata.id_education}>ดูรายละเอียด</Button>
+
       </Card>
 </Col>
         </Row>
-        <Row>
+           );
+          })}
+    
+        {/* <Row>
         <Col>          
         <Card>
         <CardBody>
@@ -105,13 +119,13 @@ const ViewEducationStudentAllStudent = (props) => {
         </CardBody>
       </Card>
 </Col>
-        </Row>
+        </Row> */}
+        
 </div>    
 
 
-
-
 </div>
+
 );
   }
   

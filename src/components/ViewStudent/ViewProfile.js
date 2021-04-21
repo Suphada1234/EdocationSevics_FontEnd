@@ -1,83 +1,69 @@
-import React, { useState } from 'react'; 
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText,  Card, CardText, CardBody, CardLink,
-    CardTitle, CardSubtitle,NavLink  } from 'reactstrap';
+import axios from "axios";
+import React, { useState, useEffect } from "react"
+import {  Row, Col, Form, FormGroup, Label,  NavLink  } from 'reactstrap';
 
-const ViewProfile = (props) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(prevState => !prevState);
+const ViewProfile = ({id}) => {
+
+  const [student, setStudent] = useState([]);
+ 
+  useEffect(() => {
+      axios.get("http://localhost:8080/students/"+id)
+      .then((response)=>{
+       setStudent(response.data);
+      });
+  }, [id]);//เมื่อidมีการเปลี่ยนเเปรง ก็จะรีหน้าทำการเปลี่ยนที่เราเปลี่ยน
+
+
     return (
         <div>
+          <br />
 <div class="container">
 <Form>
-    <center><h3> ข้อมูลส่วนตัว </h3></center>
-      <Row form>
+    <center><h3> ข้อมูลการส่วนตัว </h3></center>
+      <Row>
       <Col>
-          <FormGroup>
-            <Label for="exampleEmail">รหัสประจำตัว</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่รหัสประจำตัว
-          </FormGroup>
+            <Label for="examplePassword">รหัสนักศึกษา</Label> : {student.id_stu}
         </Col>
-      <Col>
-          <FormGroup>
-            <Label for="exampleEmail">คำนำหน้า</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่คำนำหน้า
-          </FormGroup>
-        </Col>
-      <Col>
-          <FormGroup>
-            <Label for="exampleEmail">ชื่อ</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่ชื่อ
-          </FormGroup>
-        </Col>
-        <Col>
-          <FormGroup>
-          <Label for="exampleEmail">นามสกุล</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่นามสกุล
-          </FormGroup>
-        </Col>
+      
       </Row>
       <Row>
-        <Col>
-        <FormGroup>
-        <Label for="exampleEmail">สายการเรียน</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่สายการเรียน
-        </FormGroup></Col>
-        <Col>
-        <FormGroup>
-        <Label for="exampleEmail">GPA</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่GPA
-        </FormGroup></Col>
-        <Col>
-        <FormGroup>
-        <Label for="exampleEmail">ปีการศึกษา</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่GPA
-        </FormGroup></Col>       
-      </Row>
-      <Row>
-        <Col>
-        <FormGroup>
-        <Label for="exampleEmail">ชั้น</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่ชั้น
-        </FormGroup></Col>
-        <Col>
-        <FormGroup>
-        <Label for="exampleEmail">ห้อง</Label>&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;
-            ใส่ห้อง
-        </FormGroup></Col>
-        <Col></Col>
+      <Col>
+        <Label for="exampleEmail">ชื่อ</Label> : {student.name_title} {student.fname_stu} {student.lname_stu}
+        </Col>  
+        </Row>
+        <Row>
+      <Col>
+        <Label for="exampleEmail">สายการเรียน</Label> : {student.name_curriculum } 
+        </Col>  
+        </Row>
 
-      </Row>
+        <Row>
+      <Col>
+        <Label for="exampleEmail">เกรดเฉลี่ยรวม</Label> : {student.GPA_stu} 
+        </Col>  
+        </Row>
+        <Row>
+      <Col>
+        <Label for="exampleEmail">มัธยมปีที่</Label> : {student.year_class}  <Label for="exampleEmail">ห้อง</Label> {student.class} 
+        </Col>  
+        </Row>
+        <Row>
+      <Col>
+        <Label for="exampleEmail">ปีการศึกษา</Label> : {student.year_stu} 
+        </Col>  
+        </Row>
+    </Form>
  
       <Row>
         <Col></Col>
         <Col></Col>
         <Col></Col>
-        <Col><NavLink href="./home">กลับหน้าหลัก</NavLink></Col>
-        <Col><NavLink href="./editprofile">เเก้ไขข้อมูลส่วนตัว</NavLink>
+        <Col><NavLink href="/home">กลับหน้าหลัก</NavLink></Col>
+        <Col><NavLink href={"/editprofile/" + student.id_stu}>เเก้ไขข้อมูลส่วนตัว</NavLink>
 </Col>
 
       </Row>
-    </Form>
+ 
 </div>    
 
 

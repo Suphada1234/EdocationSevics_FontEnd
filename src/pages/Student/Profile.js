@@ -1,10 +1,10 @@
 import React from "react"
 import ViewProfile from "../../components/ViewStudent/ViewProfile";
- 
-const Profile = () => {
+
+const Profile = (props) => {
     return(
 <>
-    <ViewProfile/>
+    <ViewProfile id={props.match.params.id}/>
 </>
     );
 };

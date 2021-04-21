@@ -1,11 +1,11 @@
 import React from "react"
 import ViewInsertEducation from "../../components/ViewTeacher/ViewInsertEducation";
  
-const Profile = () => {
+const InsertEducation = () => {
     return(
 <>
     <ViewInsertEducation/>
 </>
     );
 };
-export default Profile;
+export default InsertEducation;

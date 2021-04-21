@@ -1,10 +1,10 @@
 import React from "react"
 import ViewDetailEducationStudent from "../../components/ViewStudent/ViewDetailEducationStudent";
  
-const DetailEducationStudent = () => {
+const DetailEducationStudent = (props) => {
     return(
 <>
-    <ViewDetailEducationStudent/>
+    <ViewDetailEducationStudent id={props.match.params.id}/>
 </>
     );
 };

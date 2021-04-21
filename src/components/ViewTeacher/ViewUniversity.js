@@ -1,71 +1,98 @@
-import React, { useState } from 'react'; 
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText,  Card, CardText, CardBody, CardLink,
-    CardTitle, CardSubtitle,NavLink } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome' //fornt
+import { faEdit, faTrash, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText, Card, CardText, CardBody, CardLink,
+  CardTitle, CardSubtitle, NavLink, Table
+} from 'reactstrap';
 
-const ViewUniversity = (props) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(prevState => !prevState);
-    return (
-        <div>
-     <div class="container">
-<br />
+const ViewUniversity = () => {
+ 
+  const [university, setUniversity] = useState([]);
+
+  const selectUniversity = () => {
+    axios.get("http://localhost:8080/university")
+      .then((response) => {
+        console.log(response);
+        setUniversity(response.data.university);
+        console.log("select University.....");
+      });
+  };
+
+  useEffect(() => {
+    selectUniversity();
+  }, []);
+
+  return (
+    <div>
+      <Container>
+        <br />
         <Row>
-<Col xs="6"> 
-  <FormGroup>
-        <Label for="id_university">ชื่อมหาวิทยาลัย</Label>
-        <Input type="select" name="id_university" id="id_university">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </Input>
-      </FormGroup>
-</Col>
+          <Col xs="6">
+            <FormGroup>
+              <br />
+              <Label for="id_university">ค้นหาชื่อมหาวิทยาลัย</Label>
+              <Input type="select" name="id_university" id="id_university" >
+                {university.map((university) => {
+                  return (
+                    <option key={university.id_university}>{university.name_uni}</option>
+                  );
+                })}
+                <FontAwesomeIcon icon={faSearch} />
+              </Input>
+            </FormGroup>
+          </Col>
+        </Row>
+
+      </Container>
+      <br />
+      <Container>
+        <Row>
+          <Col></Col>
+          <Col></Col>
+          <Col></Col>
+          <Col><NavLink href="./insertuniversity">เพิ่มมหาวิทยาลัย</NavLink>
+          </Col>
         </Row>
         <Row>
-        <Col></Col>
-        <Col></Col>
-        <Col></Col>
-        <Col><NavLink href="./insertuniversity">เพิ่มมหาวิทยาลัย</NavLink>
-</Col>
-
-      </Row>
-</div>    
-<br />
-<div class="container">
-        <Row>
-        <Col>          
-        <Card>
-        <CardBody>
-          <CardTitle tag="h5">มหาวิทยาลัยราชภัฏนครปฐม</CardTitle>
-          <CardText>คราวๆ</CardText>
-          <Button href="./editUniversity">เเก้ไข</Button>
-        </CardBody>
-      </Card>
-</Col>
+          <h3>รายชื่อมหาลัยมหาวิทยาลัย</h3>
+          <Table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>ชื่อมหาวิทยาลัย</th>
+                <th>รายละเอียด</th>
+                <th>ลิงค์</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {university.map((university) => {
+                return (
+                  <tr key={university.id_university}>
+                    <td>{university.logo_uni}</td>
+                    <td>{university.name_uni}</td>
+                    <td>{university.detail_uni}</td>
+                    <td>{university.url_uni}</td>
+                    <td>
+                      <Button href={"./editUniversity/" + university.id_university} >
+                        <FontAwesomeIcon icon={faEdit} />เเก้ไข
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })};
+          </tbody>
+          </Table>
         </Row>
-        <Row>
-        <Col>          
-        <Card>
-        <CardBody>
-          <CardTitle tag="h5">Test</CardTitle>
-        </CardBody>
-        <img width="100%" src="/assets/318x180.svg" alt="Card image cap" />
-        <CardBody>
-          <CardText>คราวๆ</CardText>
-          <Button href="./editUniversity">รายละเอียด</Button>
-        </CardBody>
-      </Card>
-</Col>
-        </Row>
-</div>    
+      </Container>
 
 
 
 
-</div>
-);
-  }
-  
-  export default ViewUniversity;
+    </div>
+  );
+}
+
+export default ViewUniversity;

@@ -1,10 +1,10 @@
 import React from "react"
 import ViewEditGroupCourse from "../../components/ViewTeacher/ViewEditGroupCourse";
  
-const EditGroupCourse = () => {
+const EditGroupCourse = (props) => {
     return(
 <>
-    <ViewEditGroupCourse/>
+    <ViewEditGroupCourse id={props.match.params.id}/>
 </>
     );
 };

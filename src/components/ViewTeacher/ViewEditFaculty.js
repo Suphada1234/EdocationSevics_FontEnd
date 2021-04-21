@@ -1,32 +1,83 @@
-import React, { useState } from 'react'; 
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText,  Card, CardText, CardBody, CardLink,
-    CardTitle, CardSubtitle , Jumbotron ,Table } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText, Card, CardText, CardBody, CardLink,
+  CardTitle, CardSubtitle, Jumbotron, Table, Alert
+} from 'reactstrap';
 
-const ViewEditFaculty = (props) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(prevState => !prevState);
-    return (
+const ViewEditFaculty = ({ id }) => {
+  const initFaculty = {
+    name_faculty: "",
+  };
 
-        <div class="container">
-        <Form>
-        <center><h2>เเก้ไขคณะ</h2></center>
+  const [faculty, setFaculty] = useState(initFaculty);
+  const [submited, setSumited] = useState(false);
 
-      <Jumbotron>
-      <h1 className="display-3"><Input type="text" name="id_faculty" id="id_faculty" placeholder="ยังไม่ได้เชื่อม" /></h1>
-      <Label for="examplePassword">ชื่อคณะ</Label>
-        <h1 className="display-3"><Input type="text" name="name_faculty" id="name_faculty" placeholder="ยังไม่ได้เชื่อม" /></h1>
-</Jumbotron>
-<div>
+  useEffect(() => {
+    axios.get("http://localhost:8080/faculty" + id)
+      .then((response) => {
+        setFaculty(response.data)
+      });
+  }, [id]);
 
-    <Button>Submit</Button>&nbsp;&nbsp;&nbsp;
-    <Button href="./fucultyall">กลับ</Button>
+  const handleInputChange = (event) => {
+    let { name, value } = event.target;
+    //if (name === "tags") {
+    //  value = value.split(",");
+    // }
+    setFaculty({ ...faculty, [name]: value });
+  };
 
-</div>        </Form>
+  const saveFaculty = () => {
+    var data = {
+      name_faculty: faculty.name_faculty,
+    }
+    axios.put("http://localhost:8080/faculty/" + id, data)
+      .then((response) => {
+        console.log(response.data);
+        setFaculty({ ...faculty, data });
+        setSumited(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-</div>      
+  return (
+
+    <div class="container">
+      <Form>
+      {submited ? (<Alert color="success"><br /><br /><br /><br />
+          <center>อัพเดตเสร็จสิ้น!!<br /><br /><br /><br /><br />
+            <Button color="btn btn-success" href="/fucultyall">ยืนยัน</Button></center>
+        </Alert>
+        ) : ( 
+          <Form>
+          <center><h2>เเก้ไขคณะ</h2></center>
+  
+          <Jumbotron>
+            <Label for="name_faculty">ชื่อคณะ</Label>
+            <Input 
+            type="text" 
+            name="name_faculty" 
+            id="name_faculty" 
+            value={faculty.name_faculty}
+            onChange={handleInputChange}
+            placeholder={faculty.name_faculty}
+            />
+          </Jumbotron>
+          <div>
+            <Button className="btn btn-success" onClick={saveFaculty}>บันทึก</Button>
+          </div>
+        </Form>
+        )}
+      </Form>
+      
+
+    </div>
 
   );
 };
 
-  
-  export default ViewEditFaculty;
+
+export default ViewEditFaculty;

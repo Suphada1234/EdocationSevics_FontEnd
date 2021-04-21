@@ -1,10 +1,10 @@
 import React from "react"
 import ViewEditProfile from "../../components/ViewStudent/ViewEditProfile";
- 
-const Profile = () => {
+
+const Profile = (props) => {
     return(
 <>
-    <ViewEditProfile/>
+    <ViewEditProfile id={props.match.params.id}/>
 </>
     );
 };

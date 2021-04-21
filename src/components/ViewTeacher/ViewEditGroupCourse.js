@@ -1,32 +1,68 @@
-import React, { useState } from 'react'; 
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText,  Card, CardText, CardBody, CardLink,
-    CardTitle, CardSubtitle , Jumbotron ,Table } from 'reactstrap';
+import axios from 'axios';
+import React, { useState } from 'react';
+import {Container, Row, Col, Button, Form, FormGroup, Label, Input, FormText, Card, CardText, CardBody, CardLink,
+  CardTitle, CardSubtitle, Jumbotron, Table, Alert} from 'reactstrap';
 
-const ViewEditGroupCourse = (props) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(prevState => !prevState);
-    return (
+const ViewEditGroupCourse = () => {
+  const initGroupMajor = {
+    name_major: "",
+  };
 
-        <div class="container">
-        <Form>
-        <center><h2>เเก้ไขกลุ่มสาขา</h2></center>
+  const [groupmajor, setGroupMajor] = (initGroupMajor);
+  const [submited, setSumited] = useState(false)
 
-      <Jumbotron>
-      <h1 className="display-3"><Input type="text" name="id_major" id="id_major" placeholder="ยังไม่ได้เชื่อม" /></h1>
-      <Label for="examplePassword">ชื่อกลุ่มสาขา</Label>
-        <h1 className="display-3"><Input type="text" name="name_major" id="name_major" placeholder="ยังไม่ได้เชื่อม" /></h1>
-</Jumbotron>
-<div>
+  const handleInputChange = (event) => {
+    let { name, value } = event.target;
+    // if (name === "tags") {
+    //     value = value.split(",");
+    // }
+    setGroupMajor({ ...groupmajor, [name]: value });
+  };
 
-    <Button>Submit</Button>&nbsp;&nbsp;&nbsp;
-    <Button href="./groupcourseall">กลับ</Button>
+  const saveGroupMajor = () => {
+    var data = {
+      name_major: groupmajor.name_major
+    }
+    axios.post("http://localhost:8080/groupmajor", data)
+      .then((response) => {
+        console.log(response.data);
+        setSumited(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  return (
 
-</div>        </Form>
+    <div class="container">
+      <Form>
+        {submited ? (<Alert color="success"><br /><br /><br /><br />
+          <center>เพิ่มข้อมูลสำเร็จ!!<br /><br /><br /><br /><br />
+            <Button color="btn btn-success" href="/educationall">OK</Button></center>
+        </Alert>
+        ) : (
+          <Form>
+            <center><h3>เพิ่มกลุ่มสาขา</h3></center>
+            <br/>
+            <Label for="major">ชื่อกลุ่มสาขา</Label>
+            <Input 
+            type="text" 
+            name="name_major" 
+            id="name_major" 
+            onChange={handleInputChange}
+            placeholder="กรุณาใส่ชื่อกลุ่มสาขา" />
 
-</div>      
+            <div>
+              <Button className="btn btn-success" onClick={saveGroupMajor}>บันทึก</Button>
+            </div>
+          </Form>
+        )}
+      </Form>
+
+    </div>
 
   );
 };
 
-  
-  export default ViewEditGroupCourse;
+
+export default ViewEditGroupCourse;
